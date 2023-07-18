@@ -14,9 +14,9 @@ def hello_route():
     return "Hello HBNB!"
 
 @app.route('/hbnb', strict_slashes=False)
-def hello_route():
+def hbnb_route():
     """Displays 'HBNB'"""
     return "HBNB"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000)
