@@ -10,10 +10,13 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls:
-            return {k: v for k, v in FileStorage.__objects.items()
-                    if v.__class__ == cls}
-        return FileStorage.__objects
+        if cls is not None:
+            n_Dic = {}
+            for key, value in self.__objects.items():
+                if cls == value.__class__:
+                    n_Dic[key] = value
+            return n_Dic
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -39,26 +42,28 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-        }
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                        self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """Deletes an object from the __objects dictionary"""
-        dict_copy = FileStorage.__objects.copy()
-        for key, value in dict_copy.items():
-            if value == obj:
-                del FileStorage.__objects[key]
+        """To delete obj from __objects if it’s inside"""
+        if not obj:
+            return
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        if key in self.__objects:
+            del self.__objects[key]
+            self.save()
 
     def close(self):
-        """call reload method for deserializing the JSON file to objects"""
+        """Call reload() method for deserializing the JSON file to objects"""
         self.reload()
