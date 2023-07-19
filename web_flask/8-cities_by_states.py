@@ -15,11 +15,11 @@ def teardown(self):
     storage.close()
 
 
-@app.route('/states_list', strict_slashes=False)
-def states():
-    ''' Display the list of states '''
-    states = storage.all(State).values()
-    return render_template('7-states_list.html', states=states)
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_and_states():
+    ''' Display all cities by states '''
+    city_list = storage.all(State)
+    return render_template('8-cities_by_states.html', city_list=city_list)
 
 
 if __name__ == "__main__":
