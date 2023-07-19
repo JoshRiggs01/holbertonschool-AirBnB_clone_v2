@@ -3,7 +3,7 @@
 Listening on 0.0.0.0:5000
 Route '/' displays "Hello HBNB!"
 """
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
